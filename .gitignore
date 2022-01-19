@@ -1,0 +1,4 @@
+/dev/
+/var/
+/vendor/
+/env.*.php

@@ -1,0 +1,266 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "41c8e76d361ead0d3d30ab6f01893de8",
+    "packages": [
+        {
+            "name": "ekok/cosiler",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/cosiler.git",
+                "reference": "5e86e49e5369ab4df69b9d366ce9392ec634fbe9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/cosiler/zipball/5e86e49e5369ab4df69b9d366ce9392ec634fbe9",
+                "reference": "5e86e49e5369ab4df69b9d366ce9392ec634fbe9",
+                "shasum": ""
+            },
+            "require": {
+                "ekok/php-utils": "dev-master",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "ekok/php-container": "Context container and DI manager",
+                "ekok/php-sql": "Mapping code with SQL database tables",
+                "ekok/php-utils": "A set of php utilities",
+                "ekok/php-validation": "Validating user input"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Cosiler\\": "src/"
+                },
+                "files": [
+                    "src/Encoder/Json.php",
+                    "src/Http/Http.php",
+                    "src/Http/Request.php",
+                    "src/Http/Response.php",
+                    "src/Route/Route.php",
+                    "src/Template/Template.php",
+                    "src/Cosiler.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP Framework",
+            "support": {
+                "issues": "https://github.com/eghojansu/cosiler/issues",
+                "source": "https://github.com/eghojansu/cosiler/tree/dev"
+            },
+            "time": "2022-01-18T08:59:44+00:00"
+        },
+        {
+            "name": "ekok/php-container",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/php-container.git",
+                "reference": "7442b27d919bd803e975f9565f3c8cfb765a49fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/php-container/zipball/7442b27d919bd803e975f9565f3c8cfb765a49fb",
+                "reference": "7442b27d919bd803e975f9565f3c8cfb765a49fb",
+                "shasum": ""
+            },
+            "require": {
+                "ekok/php-utils": "dev-master",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP Container",
+            "support": {
+                "issues": "https://github.com/eghojansu/php-container/issues",
+                "source": "https://github.com/eghojansu/php-container/tree/master"
+            },
+            "time": "2022-01-17T06:43:06+00:00"
+        },
+        {
+            "name": "ekok/php-sql",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/php-sql.git",
+                "reference": "d5b8da0c1c83f57d8eb6e1c75363f51176992e91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/php-sql/zipball/d5b8da0c1c83f57d8eb6e1c75363f51176992e91",
+                "reference": "d5b8da0c1c83f57d8eb6e1c75363f51176992e91",
+                "shasum": ""
+            },
+            "require": {
+                "ekok/php-utils": "dev-master",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Sql\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP SQL Utility",
+            "support": {
+                "issues": "https://github.com/eghojansu/php-sql/issues",
+                "source": "https://github.com/eghojansu/php-sql/tree/master"
+            },
+            "time": "2022-01-05T23:03:30+00:00"
+        },
+        {
+            "name": "ekok/php-utils",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/php-utils.git",
+                "reference": "ec05d0bc28c74b921e33c85ed5e01e26b62b2d13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/ec05d0bc28c74b921e33c85ed5e01e26b62b2d13",
+                "reference": "ec05d0bc28c74b921e33c85ed5e01e26b62b2d13",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Utils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP Utilities",
+            "support": {
+                "issues": "https://github.com/eghojansu/php-utils/issues",
+                "source": "https://github.com/eghojansu/php-utils/tree/dev"
+            },
+            "time": "2022-01-07T05:52:00+00:00"
+        },
+        {
+            "name": "ekok/php-validation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/php-validation.git",
+                "reference": "927612fd19b2b1ca782af270344995e9b6d9f1ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/php-validation/zipball/927612fd19b2b1ca782af270344995e9b6d9f1ce",
+                "reference": "927612fd19b2b1ca782af270344995e9b6d9f1ce",
+                "shasum": ""
+            },
+            "require": {
+                "ekok/php-utils": "dev-master",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Validation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP Validation",
+            "support": {
+                "issues": "https://github.com/eghojansu/php-validation/issues",
+                "source": "https://github.com/eghojansu/php-validation/tree/dev"
+            },
+            "time": "2022-01-18T03:42:12+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "ekok/cosiler": 20,
+        "ekok/php-validation": 20,
+        "ekok/php-sql": 20,
+        "ekok/php-utils": 20,
+        "ekok/php-container": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}

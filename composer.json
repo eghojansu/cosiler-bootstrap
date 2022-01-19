@@ -1,0 +1,26 @@
+{
+  "name": "ekok/cosiler-bootstrap",
+  "description": "Cosiler bootstrap",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Eko Kurniawan",
+      "email": "setiawanegho@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8",
+    "ekok/cosiler": "dev-master",
+    "ekok/php-validation": "dev-master",
+    "ekok/php-sql": "dev-master",
+    "ekok/php-utils": "dev-master",
+    "ekok/php-container": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
