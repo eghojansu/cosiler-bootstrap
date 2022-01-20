@@ -13,7 +13,7 @@
         <p><?= $message ?></p>
         <p><a href="<?= path('/') ?>" class="btn btn-primary">Home</a></p>
         <?php if ($dev): ?>
-          <pre><?= implode("\n", $trace) ?></pre>
+          <pre style="font-size: smaller"><?= implode("\n", $trace) ?></pre>
         <?php endif ?>
       </div>
     </div>

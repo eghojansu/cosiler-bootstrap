@@ -10,14 +10,14 @@ $error = error();
     <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
     <?= alert($error['message'] ?? null, 'danger', false) ?>
     <div class="form-floating">
-      <input type="text" name="username" class="form-control <?= isset($error['errors']['username']) ? 'is-invalid' : null ?>" value="<?= e($data['username'] ?? null) ?>" id="inputUsername" placeholder="Username">
+      <?= input('username', $data['username'] ?? null, null, array('form-control', isset($error['errors']['username']) ? 'is-invalid' : null)) ?>
       <label for="inputUsername">Username</label>
-      <?php if (isset($error['errors']['username'])): ?><div class="invalid-feedback"><?= $error['errors']['username'] ?></div><?php endif ?>
+      <?= feedback($error['errors']['username'] ?? null) ?>
     </div>
     <div class="form-floating mt-3">
-      <input type="password" name="password" class="form-control <?= isset($error['errors']['password']) ? 'is-invalid' : null ?>" id="inputPassword" placeholder="Password">
+      <?= input('password', null, null, array('form-control', isset($error['errors']['password']) ? 'is-invalid' : null), 'password') ?>
       <label for="inputPassword">Password</label>
-      <?php if (isset($error['errors']['password'])): ?><div class="invalid-feedback"><?= $error['errors']['password'] ?></div><?php endif ?>
+      <?= feedback($error['errors']['password'] ?? null) ?>
     </div>
 
     <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign in</button>

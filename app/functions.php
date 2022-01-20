@@ -1,6 +1,5 @@
 <?php
 
-use Ekok\Container\Box;
 use Ekok\Cosiler;
 use Ekok\Cosiler\Http;
 use Ekok\Cosiler\Http\Response;
@@ -9,8 +8,8 @@ use Ekok\Cosiler\Template;
 
 // register functions as globals
 
-function storage(): Box {
-    return Cosiler\storage();
+function storage(string $name = null, ...$sets) {
+    return Cosiler\storage($name, ...$sets);
 }
 
 function path(string $path = null): string {
@@ -171,12 +170,20 @@ function format_trace_frame(array $frame) {
     $line .= ' ';
 
     if (isset($frame['class'])) {
-        $line .= $frame['line'] . '->';
+        $line .= $frame['class'] . '->';
     }
 
     $line .= $frame['function'];
 
     return $line;
+}
+
+function dump(...$values): void {
+    ob_end_clean();
+    print('<pre>');
+    var_dump(...$values);
+    print('</pre>');
+    die;
 }
 
 // extends

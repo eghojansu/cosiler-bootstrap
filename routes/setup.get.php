@@ -2,7 +2,7 @@
 
 not_found_if(is_file($versionFile = $fun['tmp_dir'] . '/version.txt'));
 
-$writable = !is_writable(dirname($versionFile));
+$writable = is_writable(dirname($versionFile));
 $fun['title'] = 'SETUP';
 ?>
 <div class="mx-auto my-5" style="max-width: 280px">
