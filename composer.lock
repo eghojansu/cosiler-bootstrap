@@ -162,12 +162,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/eghojansu/php-utils.git",
-                "reference": "ec05d0bc28c74b921e33c85ed5e01e26b62b2d13"
+                "reference": "583068da18c05aac0c554138eebb6800aef55385"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/ec05d0bc28c74b921e33c85ed5e01e26b62b2d13",
-                "reference": "ec05d0bc28c74b921e33c85ed5e01e26b62b2d13",
+                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/583068da18c05aac0c554138eebb6800aef55385",
+                "reference": "583068da18c05aac0c554138eebb6800aef55385",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
                 "issues": "https://github.com/eghojansu/php-utils/issues",
                 "source": "https://github.com/eghojansu/php-utils/tree/dev"
             },
-            "time": "2022-01-07T05:52:00+00:00"
+            "time": "2022-01-20T01:08:11+00:00"
         },
         {
             "name": "ekok/php-validation",
