@@ -1,6 +1,7 @@
 <?php
 
 use Ekok\Cosiler\Http;
+use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Http\Response;
 use Ekok\Cosiler\Http\HttpException;
 use Ekok\Validation\ValidationException;
@@ -24,11 +25,17 @@ function handleError(Throwable $error) {
     }
 
     if ($error instanceof ValidationException) {
+        $data['errors'] = $error->result->getErrors();
+    }
+
+    if (Request\is_json()) {
+        Response\json($data, $data['status_code']);
+    } elseif ($error instanceof ValidationException) {
         errorCommit($data['message'], $error->result->getErrors());
         dataCommit($error->result->getData());
         back();
+    } else {
+        Response\start($code);
+        load('error', $data);
     }
-
-    Response\start($code);
-    load('error', $data);
 }
