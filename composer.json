@@ -10,12 +10,6 @@
       "email": "setiawanegho@gmail.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/eghojansu/cosiler-bootstrap"
-    }
-  ],
   "require": {
     "php": ">=8",
     "ekok/cosiler": "dev-master",
