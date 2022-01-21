@@ -3,6 +3,7 @@
   "description": "Cosiler bootstrap",
   "type": "project",
   "license": "MIT",
+  "version": "alpha",
   "minimum-stability": "dev",
   "authors": [
     {
