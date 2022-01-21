@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41c8e76d361ead0d3d30ab6f01893de8",
+    "content-hash": "caa379dda394b22728afba469d5f3264",
     "packages": [
         {
             "name": "ekok/cosiler",
