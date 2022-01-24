@@ -1,0 +1,16 @@
+actor_suffix: Tester
+bootstrap: scripts/bootstrap.php
+coverage:
+    enabled: true
+    remote: true
+    include:
+        - app/*
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs

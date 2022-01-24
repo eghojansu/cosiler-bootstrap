@@ -14,5 +14,5 @@ if (is_array($result) || $result instanceof JsonSerializable) {
     Response\start(200);
     load('main', compact('output', 'fun'));
 } else {
-    not_found('This page is not exists');
+    not_found();
 }

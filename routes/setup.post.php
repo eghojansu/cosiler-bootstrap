@@ -10,7 +10,7 @@ if (!is_writable(dirname($versionFile))) {
 /** @var PDO */
 $pdo = $fun['db']->getPdo();
 
-foreach (glob($fun['project_dir'] . '/databases/sqlite/*.sql') as $file) {
+foreach (glob($fun['project_dir'] . '/databases/'. $fun['connection.default'] . '/*.sql') as $file) {
   $pdo->exec(file_get_contents($file));
 }
 

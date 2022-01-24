@@ -22,7 +22,7 @@ if (($since = $_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? null) && strtotime($since) =
   exit();
 }
 
-if ($range = $_SERVER['HTTP_RANGE']) {
+if ($range = $_SERVER['HTTP_RANGE'] ?? null) {
   if (0 !== strncmp($range, 'bytes=', 6)) {
     header('HTTP/1.1 416 Requested Range Not Satisfiable', true, 416);
     header('Content-Range: bytes */' . $size); // Required in 416.

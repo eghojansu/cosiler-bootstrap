@@ -3,7 +3,7 @@ root = true
 [*]
 charset = utf-8
 
-[*.{css,js,json,php,sql}]
+[*.{css,js,json,php,sql,yml}]
 trim_trailing_whitespace = true
 insert_final_newline = true
 end_of_line = lf
@@ -12,4 +12,7 @@ indent_style = space
 
 [*.{css,js,json,sql}]
 indent_size = 2
+insert_final_newline = false
+
+[*.yml]
 insert_final_newline = false

@@ -46,7 +46,7 @@ function load(string $template, array $data = null): void {
 }
 
 function not_found(string $message = null, array $payload = null, array $headers = null): void {
-    Http\not_found($message ?? 'This page was not exists', $payload, $headers);
+    Http\not_found($message ?? 'The requested page does not exists', $payload, $headers);
 }
 
 function get(string $key = null) {
