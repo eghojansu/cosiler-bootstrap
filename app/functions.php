@@ -104,12 +104,12 @@ function userCommit($id): void {
     session('user', $id);
 }
 
-function guard(string|array $roles = null, string $target = null): void {
-    if (!($user = user())) {
-        Response\redirect($target ?? 'login');
-    }
+function has_role(string|array $roles): bool {
+    return $roles && 0 < count(array_intersect(user()['roles'], (array) $roles));
+}
 
-    if ($roles && 0 === count(array_intersect($user['roles'], (array) $roles))) {
+function guard(string|array $roles = null, string $target = null): void {
+    if (is_guest() || !has_role($roles)) {
         Response\redirect($target ?? 'login');
     }
 }
