@@ -1,4 +1,4 @@
--- target engine: mysql
+-- target engine: SQLITE
 
 DELETE FROM "user";
 INSERT INTO "user" ("userid", "name", "roles", "created_by", "updated_by", "created_at", "updated_at")
