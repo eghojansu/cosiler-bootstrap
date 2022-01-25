@@ -7,7 +7,8 @@ use Ekok\Validation\Validator;
 
 use function Ekok\Cosiler\Template\directory;
 
-define('ENV_', 'COSILER_ENV');
+defined('ENV_') || define('ENV_', 'COSILER_ENV');
+
 directory(__DIR__ . '/../templates');
 storage(
     'fun',

@@ -1,10 +1,5 @@
 actor_suffix: Tester
 bootstrap: scripts/bootstrap.php
-coverage:
-    enabled: true
-    remote: true
-    include:
-        - app/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
