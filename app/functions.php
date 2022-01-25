@@ -63,6 +63,10 @@ function post(string $key = null) {
 
 // extends
 
+function get_int(string $key, int $default = 1): int {
+    return intval(get($key) ?? $default, 0);
+}
+
 function not_found_if(bool|callable $condition, string $message = null, ...$args): void {
     if (is_true($condition, ...$args)) {
         not_found($message);
