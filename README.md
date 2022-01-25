@@ -1,6 +1,12 @@
-# A working example of [ekok/cosiler](https://github.com/eghojansu/cosiler)
+# Cosiler-Bootstrap
 
-After perform `composer create-project ekok/cosiler-bootstrap` then access path `/setup.php` in your browser.
+A working example of [ekok/cosiler](https://github.com/eghojansu/cosiler)
+
+## Installation
+
+`composer create-project ekok/cosiler-bootstrap medimom-server --repository="{\"url\": \"https://github.com/eghojansu/cosiler-bootstrap\", \"type\": \"vcs\"}" --stability=dev` 
+
+Access setup in path `/setup.php` in your browser.
 
 ## Starting test server
 
