@@ -104,14 +104,18 @@ function userCommit($id): void {
     session('user', $id);
 }
 
-function guard(string $target = null): void {
-    if (is_guest()) {
+function guard(string|array $roles = null, string $target = null): void {
+    if (!($user = user())) {
+        Response\redirect($target ?? 'login');
+    }
+
+    if ($roles && 0 === count(array_intersect($user['roles'], (array) $roles))) {
         Response\redirect($target ?? 'login');
     }
 }
 
 function guest(string $target = null): void {
-    is_guest() || redirect($target ?? '/');
+    is_guest() || redirect($target ?? storage()['home_route'] ?? '/');
 }
 
 function message() {
