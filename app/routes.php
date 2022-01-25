@@ -11,8 +11,12 @@ $output = ob_get_clean();
 if (is_array($result) || $result instanceof JsonSerializable) {
     Response\json($result);
 } elseif (Route\did_match()) {
-    Response\start(200);
-    load('main', compact('output', 'fun'));
+    if ($layout = layout_used()) {
+        Response\start(200);
+        load($layout, compact('output', 'fun'));
+    } else {
+        Response\html($output);
+    }
 } else {
     not_found();
 }

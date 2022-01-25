@@ -6,7 +6,7 @@ use Ekok\Cosiler\Http\Response;
 use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Template;
 
-// register functions as globals
+// redefine: register functions as globals
 
 function storage(string $name = null, ...$sets) {
     return Cosiler\storage($name, ...$sets);
@@ -14,6 +14,10 @@ function storage(string $name = null, ...$sets) {
 
 function path(string $path = null): string {
     return Http\path($path);
+}
+
+function current_path(): string {
+    return Request\path();
 }
 
 function asset(string $path): string {
@@ -55,6 +59,14 @@ function get(string $key = null) {
 
 function post(string $key = null) {
     return Request\post($key);
+}
+
+// extends
+
+function not_found_if(bool|callable $condition, string $message = null, ...$args): void {
+    if (is_true($condition, ...$args)) {
+        not_found($message);
+    }
 }
 
 // customs
@@ -130,6 +142,18 @@ function errorCommit(string $message, array $errors = null, array $data = null):
     ));
 }
 
+function layout(string $layout): void {
+    storage()['layout'] = $layout;
+}
+
+function layout_none(): void {
+    layout('');
+}
+
+function layout_used(): string {
+    return storage()['layout'] ?? 'base';
+}
+
 function validate(array $rules, array $data = null): array {
     return storage()['validator']->validate($rules, $data ?? post())->getData();
 }
@@ -184,12 +208,4 @@ function dump(...$values): void {
     var_dump(...$values);
     print('</pre>');
     die;
-}
-
-// extends
-
-function not_found_if(bool|callable $condition, string $message = null, ...$args): void {
-    if (is_true($condition, ...$args)) {
-        not_found($message);
-    }
 }
