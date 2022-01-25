@@ -14,7 +14,7 @@ return array(
             'dsn' => 'mysql:host=localhost;dbname=my_db',
             'username' => 'root',
             'password' => null,
-            'options' => null,
+            'options' => array('quotes' => '`'),
         ),
         'sqlite' => array(
             'dsn' => 'sqlite:' . __DIR__ . '/var/mydata.db',
