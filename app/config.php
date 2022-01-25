@@ -16,9 +16,9 @@ storage(
         ->load(
             __DIR__ . '/../env.php',
             __DIR__ . '/../env.dev.php',
-            __DIR__ . '/../env.' . strtolower($_ENV[ENV_] ?? 'prod') .'.php',
+            __DIR__ . '/../env.' . ($env = strtolower($_ENV[ENV_] ?? 'prod')) .'.php',
         )
-        ->with(static function (Box $box) {
+        ->with(static function (Box $box) use ($env) {
             $dir = Str::fixslashes(dirname(__DIR__));
             $tmp = $box['tmp_dir'] ?? ($dir . '/var');
             $con = $box['connection.' . $box['connection.default']];
@@ -29,6 +29,7 @@ storage(
             $box->allSet(array(
                 'tmp_dir' => $tmp,
                 'project_dir' => $dir,
+                'env' => $box['env'] ?? $env,
                 'db' => static fn() => new Connection($con['dsn'], $con['username'] ?? null, $con['password'] ?? null, $con['options'] ?? null),
                 'validator' => static fn() => new Validator(),
             ));
