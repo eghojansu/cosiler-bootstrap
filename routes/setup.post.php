@@ -1,8 +1,8 @@
 <?php
 
-not_found_if(is_file($versionFile = $fun['tmp_dir'] . '/version.txt'));
+not_found_if(is_installed($location));
 
-if (!is_writable(dirname($versionFile))) {
+if (!is_writable(dirname($location))) {
   errorCommit('Temp directory is not writable');
   back();
 }
@@ -16,5 +16,5 @@ foreach (glob($fun['project_dir'] . '/databases/'. $fun['connection.default'] . 
 
 $fun['db']->update('user', array('active' => 1, 'password' => password_hash('admin123', PASSWORD_BCRYPT)), array('userid = "admin"'));
 
-file_put_contents($versionFile, 'Installed at ' . date('Y-m-d H:i:s'));
+file_put_contents($location, 'Installed at ' . date('Y-m-d H:i:s'));
 redirect('/');

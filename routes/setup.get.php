@@ -1,9 +1,9 @@
 <?php
 
-not_found_if(is_file($versionFile = $fun['tmp_dir'] . '/version.txt'));
+not_found_if(is_installed($location));
 layout('base');
 
-$writable = is_writable(dirname($versionFile));
+$writable = is_writable(dirname($location));
 $fun['title'] = 'SETUP';
 ?>
 <div class="mx-auto my-5 text-center" style="max-width: 280px">

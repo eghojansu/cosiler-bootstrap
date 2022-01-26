@@ -40,11 +40,6 @@ function flash(string $key = null) {
     return Http\flash($key);
 }
 
-function logout(string $target = null): void {
-    Http\session_end();
-    redirect($target ?? '/');
-}
-
 function load(string $template, array $data = null): void {
     Template\load($template, $data);
 }
@@ -73,7 +68,7 @@ function not_found_if(bool|callable $condition, string $message = null, ...$args
     }
 }
 
-// customs
+// apps
 
 function env(): string {
     return storage()['env'] ?? 'prod';
@@ -83,8 +78,20 @@ function env_is(string ...$envs): bool {
     return in_array(strtolower(env()), array_map('strtolower', $envs));
 }
 
+function is_installed(string &$versionFile = null): bool {
+    $versionFile = storage()['tmp_dir'] . '/version.txt';
+
+    return !env_is('dev') && is_file($versionFile);
+}
+
+// auth and messaging
+
 function is_guest(): bool {
     return !session('user');
+}
+
+function has_role(string|array $roles): bool {
+    return ($user = user()) && 0 < count(array_intersect($user['roles'], (array) $roles));
 }
 
 function user(): array|null {
@@ -108,8 +115,9 @@ function userCommit($id): void {
     session('user', $id);
 }
 
-function has_role(string|array $roles): bool {
-    return ($user = user()) && 0 < count(array_intersect($user['roles'], (array) $roles));
+function logout(string $target = null): void {
+    Http\session_end();
+    redirect($target ?? '/');
 }
 
 function guard(string|array $roles = null, string $target = null): void {
@@ -119,7 +127,7 @@ function guard(string|array $roles = null, string $target = null): void {
 }
 
 function guest(string $target = null): void {
-    is_guest() || redirect($target ?? storage()['home_route'] ?? '/');
+    is_guest() || redirect($target ?? '/');
 }
 
 function message() {
@@ -150,17 +158,7 @@ function errorCommit(string $message, array $errors = null, array $data = null):
     ));
 }
 
-function layout(string $layout): void {
-    storage()['layout'] = $layout;
-}
-
-function layout_none(): void {
-    layout('');
-}
-
-function layout_used(): string {
-    return storage()['layout'] ?? 'base';
-}
+// content
 
 function validate(array $rules, array $data = null): array {
     return storage()['validator']->validate($rules, $data ?? post())->getData();
@@ -187,6 +185,22 @@ function file_mime(string $file, string $default = null, bool $ext = false): str
 
     return $mimes[$ext ? $file : strtolower(ltrim(strrchr($file, '.'), '.'))] ?? $default ?? 'application/octet-stream';
 }
+
+// templating
+
+function layout(string $layout): void {
+    storage()['layout'] = $layout;
+}
+
+function layout_none(): void {
+    layout('');
+}
+
+function layout_used(): string {
+    return storage()['layout'] ?? 'base';
+}
+
+// debugging
 
 function format_trace_frame(array $frame) {
     if (false !== strpos($frame['function'], '{closure}')) {
