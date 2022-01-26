@@ -109,7 +109,7 @@ function userCommit($id): void {
 }
 
 function has_role(string|array $roles): bool {
-    return 0 < count(array_intersect(user()['roles'], (array) $roles));
+    return ($user = user()) && 0 < count(array_intersect($user['roles'], (array) $roles));
 }
 
 function guard(string|array $roles = null, string $target = null): void {
