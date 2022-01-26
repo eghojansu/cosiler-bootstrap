@@ -1,6 +1,7 @@
 <?php
 
 not_found_if(is_file($versionFile = $fun['tmp_dir'] . '/version.txt'));
+layout('base');
 
 $writable = is_writable(dirname($versionFile));
 $fun['title'] = 'SETUP';

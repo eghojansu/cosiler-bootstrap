@@ -1,6 +1,7 @@
 <?php
 
 use Ekok\Utils\Arr;
+use Ekok\Utils\Payload;
 use Ekok\Utils\Str;
 
 function e(string|int|float|bool|null $str): string|null {
@@ -17,11 +18,11 @@ function attrs(array $attrs = null): string {
 
         if (is_numeric($key)) {
             $str .= ' ' . ((string) $value);
-        } elseif (is_array($value) && ($arr = array_filter($value))) {
-            if (is_numeric(implode('', array_keys($arr)))) {
-                $str .= ' ' . $key . '="' . implode(' ', $value) . '"';
+        } elseif (is_array($value) && ($arr = array_filter(array_unique($value)))) {
+            if (Arr::indexed($arr)) {
+                $str .= ' ' . $key . '="' . implode(' ', $arr) . '"';
             } else {
-                $str .= Arr::reduce($arr, fn($str, $el) => $str . ' ' . $key . $el->key . '="' . ((string) $el->value) . '"');
+                $str .= Arr::reduce($arr, fn($str, Payload $el) => $str . ' ' . $key . $el->key . '="' . ((string) $el->value) . '"');
             }
         } elseif (true === $value) {
             $str .= ' ' . $key;
@@ -31,6 +32,14 @@ function attrs(array $attrs = null): string {
     }
 
     return $str;
+}
+
+function value_attrs($value) {
+    return !is_array($value) || Arr::indexed($value) ? compact('value') : Arr::each($value, static fn (Payload $item) => $item->key('value' === $item->key ? 'value' : 'data-' . $item->key));
+}
+
+function value_given($given, $value) {
+    return is_array($given) && is_array($value) ? !!array_intersect($given, $value) : $given == $value;
 }
 
 function tag(string $name, array $attrs = null, string $content = null, bool $close = false): string {
@@ -77,10 +86,69 @@ function input(
         'name' => $name,
         'type' => $type ?? 'text',
         'value' => e($value),
-        'id' => 'input' . Str::casePascal($name),
         'class' => $classes,
-        'placeholder' => Str::caseTitle($name),
+        'id' => $attrs['id'] ?? ('input' . Str::casePascal($name)),
+        'placeholder' => $attrs['placeholder'] ?? Str::caseTitle($name),
     );
 
     return tag('input', $sets + ($attrs ?? array()));
+}
+
+function choice(
+    string $name,
+    array $options,
+    string|int|float|bool|null|array $value = null,
+    array $attrs = null,
+    string|array $classes = null,
+    bool $expanded = null,
+    bool $multiple = null,
+): string {
+    $sets = array(
+        'name' => $name,
+        'class' => (array) $classes,
+        'placeholder' => false,
+    ) + ($attrs ?? array());
+
+    if ($expanded) {
+        $sets['class'][] = 'form-check-input';
+
+        if ($multiple) {
+            return Arr::reduce($options, static function (string|null $choices, Payload $option) use ($name, $value, $sets) {
+                $attrs = value_attrs($option->value);
+                $attrs['id'] = 'choice' . Str::casePascal($name) . Str::casePascal(str_replace(' ', '_', $option->key));
+                $attrs['checked'] = value_given($attrs['value'], $value);
+
+                return $choices . ($choices ? PHP_EOL : '') . tag(
+                    'div',
+                    array('class' => 'form-check'),
+                    input($name . '[]', $attrs['value'], $attrs + $sets, $sets['class'], 'checkbox') .
+                    tag('label', array('class' => 'form-check-label', 'for' => $attrs['id']), $option->key),
+                );
+            });
+        }
+
+        return Arr::reduce($options, static function (string|null $choices, Payload $option) use ($name, $value, $sets) {
+            $attrs = value_attrs($option->value);
+            $attrs['id'] = 'choice' . Str::casePascal($name) . Str::casePascal(str_replace(' ', '_', $option->key));
+            $attrs['checked'] = $attrs['value'] == $value;
+
+            return $choices . ($choices ? PHP_EOL : '') . tag(
+                'div',
+                array('class' => 'form-check'),
+                input($name, $attrs['value'], $attrs + $sets, $sets['class'], 'radio') .
+                tag('label', array('class' => 'form-check-label', 'for' => $attrs['id']), $option->key),
+            );
+        });
+    }
+
+    $sets['id'] = $attrs['id'] ?? ('input' . Str::caseCamel($name));
+
+    $choices = Arr::reduce($options, static function (string $choices, Payload $option) use ($value) {
+        $attrs = value_attrs($option->value);
+        $attrs['selected'] = value_given($attrs['value'], $value);
+
+        return $choices . ($choices ? PHP_EOL : '') . tag('option', $attrs, $option->key);
+    }, false === ($attrs['placeholder'] ?? null) ? '' : tag('option', null, '-- Select ' . Str::caseTitle($name) . ' --'));
+
+    return tag('select', $sets, $choices);
 }
