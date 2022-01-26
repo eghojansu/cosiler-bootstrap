@@ -8,6 +8,6 @@ A working example of [ekok/cosiler](https://github.com/eghojansu/cosiler)
 
 Access setup in path `/setup.php` in your browser.
 
-## Starting test server
+## Starting server
 
 `COSILER_ENV=test php -d variables_order=EGPCS -S localhost:8001 public/index.php`
