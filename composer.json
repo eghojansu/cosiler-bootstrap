@@ -11,6 +11,11 @@
             "email": "setiawanegho@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
     "require": {
         "php": ">=8",
         "ekok/cosiler": "dev-master",
@@ -18,11 +23,6 @@
         "ekok/php-sql": "dev-master",
         "ekok/php-utils": "dev-master",
         "ekok/php-container": "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
     },
     "require-dev": {
         "codeception/codeception": "~4.1",
