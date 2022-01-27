@@ -21,4 +21,5 @@ if (!$found['active']) {
 
 userCommit($found['userid']);
 messageCommit('Welcome back');
-back();
+record('login');
+redirect('/');

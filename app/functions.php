@@ -86,8 +86,12 @@ function is_installed(string &$versionFile = null): bool {
 
 // auth and messaging
 
+function user_id(): string|null {
+    return session('user');
+}
+
 function is_guest(): bool {
-    return !session('user');
+    return !user_id();
 }
 
 function has_role(string|array $roles): bool {
@@ -98,9 +102,7 @@ function user(): array|null {
     static $user = false;
 
     if (false === $user) {
-        $id = session('user');
-
-        $user = $id ? storage()['db']->selectOne('user', array('userid = ?', $id)) : null;
+        $user = ($id = user_id()) ? storage()['db']->selectOne('user', array('userid = ?', $id)) : null;
 
         if ($user) {
             $user['roles'] = explode(',', $user['roles']);
@@ -109,6 +111,20 @@ function user(): array|null {
     }
 
     return $user;
+}
+
+function record(string $activity, bool $visible = true, string $url = null): void {
+    try {
+        storage()['db']->insert('user_activity', array(
+            'userid' => user_id(),
+            'activity' => $activity,
+            'visible' => $visible ? 1 : 0,
+            'url' => $url ?? Request\uri(),
+            'ip_address' => Request\ip_address(),
+            'user_agent' => Request\user_agent(),
+            'recorded_at' => date('Y-m-d H:i:s'),
+        ));
+    } catch (\Throwable $e) {}
 }
 
 function userCommit($id): void {

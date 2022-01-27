@@ -3,6 +3,8 @@
 use Ekok\Cosiler\Route;
 use Ekok\Cosiler\Http\Response;
 
+record('visit', false);
+
 Route\globals_add('fun', $fun = storage());
 ob_start();
 $result = Route\files(__DIR__ . '/../routes');
