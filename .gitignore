@@ -1,4 +1,6 @@
 /dev/
 /var/
 /vendor/
+/env.php
 /env.*.php
+!/env.dist.php

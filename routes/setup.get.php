@@ -1,7 +1,6 @@
 <?php
 
 not_found_if(is_installed($location));
-layout('base');
 
 $writable = is_writable(dirname($location));
 $fun['title'] = 'SETUP';

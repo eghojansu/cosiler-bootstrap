@@ -14,9 +14,9 @@ storage(
     'fun',
     (new Box())
         ->load(
+            __DIR__ . '/../env.dist.php',
             __DIR__ . '/../env.php',
-            __DIR__ . '/../env.dev.php',
-            __DIR__ . '/../env.' . ($env = strtolower($_ENV[ENV_] ?? 'prod')) .'.php',
+            __DIR__ . '/../env.' . ($env = isset($_ENV[ENV_]) ? strtolower($_ENV[ENV_]) : null) .'.php',
         )
         ->with(static function (Box $box) use ($env) {
             $dir = Str::fixslashes(dirname(__DIR__));
@@ -29,7 +29,7 @@ storage(
             $box->allSet(array(
                 'tmp_dir' => $tmp,
                 'project_dir' => $dir,
-                'env' => $box['env'] ?? $env,
+                'env' => $env ?? $box['env'] ?? 'prod',
                 'db' => static fn() => new Connection($con['dsn'], $con['username'] ?? null, $con['password'] ?? null, $con['options'] ?? null),
                 'validator' => static fn() => new Validator(),
             ));
