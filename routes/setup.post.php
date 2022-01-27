@@ -3,7 +3,7 @@
 not_found_if(is_installed($location));
 
 if (!is_writable(dirname($location))) {
-  errorCommit('Temp directory is not writable');
+  error_commit('Temp directory is not writable');
   back();
 }
 

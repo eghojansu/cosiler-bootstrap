@@ -90,12 +90,8 @@ function user_id(): string|null {
     return session('user');
 }
 
-function is_guest(): bool {
-    return !user_id();
-}
-
-function has_role(string|array $roles): bool {
-    return ($user = user()) && 0 < count(array_intersect($user['roles'], (array) $roles));
+function user_password(string $password, string $hash = null): bool {
+    return ($check = $hash ?? user()['password'] ?? null) && password_verify($password, $check);
 }
 
 function user(): array|null {
@@ -113,27 +109,21 @@ function user(): array|null {
     return $user;
 }
 
-function record(string $activity, bool $visible = true, string $url = null): void {
-    try {
-        storage()['db']->insert('user_activity', array(
-            'userid' => user_id(),
-            'activity' => $activity,
-            'visible' => $visible ? 1 : 0,
-            'url' => $url ?? Request\uri(),
-            'ip_address' => Request\ip_address(),
-            'user_agent' => Request\user_agent(),
-            'recorded_at' => date('Y-m-d H:i:s'),
-        ));
-    } catch (\Throwable $e) {}
+function user_commit($id): void {
+    session('user', $id);
 }
 
-function userCommit($id): void {
-    session('user', $id);
+function has_role(string|array $roles): bool {
+    return ($user = user()) && 0 < count(array_intersect($user['roles'], (array) $roles));
 }
 
 function logout(string $target = null): void {
     Http\session_end();
     redirect($target ?? '/');
+}
+
+function is_guest(): bool {
+    return !user_id();
 }
 
 function guard(string|array $roles = null, string $target = null): void {
@@ -150,7 +140,7 @@ function message() {
     return flash('message');
 }
 
-function messageCommit(string $message): void {
+function message_commit(string $message): void {
     session('message', $message);
 }
 
@@ -158,7 +148,7 @@ function data() {
     return flash('data');
 }
 
-function dataCommit(array $data = null): void {
+function data_commit(array $data = null): void {
     session('data', $data ?? array());
 }
 
@@ -166,12 +156,26 @@ function error() {
     return flash('error');
 }
 
-function errorCommit(string $message, array $errors = null, array $data = null): void {
-    dataCommit($data);
+function error_commit(string $message, array $errors = null, array $data = null): void {
+    data_commit($data);
     session('error', array(
         'message' => $message,
         'errors' => array_map(fn(array $group) => implode(', ', $group), $errors ?? array()),
     ));
+}
+
+function record(string $activity, bool $visible = true, string $url = null): void {
+    try {
+        storage()['db']->insert('user_activity', array(
+            'userid' => user_id(),
+            'activity' => $activity,
+            'visible' => $visible ? 1 : 0,
+            'url' => $url ?? Request\uri(),
+            'ip_address' => Request\ip_address(),
+            'user_agent' => Request\user_agent(),
+            'recorded_at' => date('Y-m-d H:i:s'),
+        ));
+    } catch (\Throwable $e) {}
 }
 
 // content
