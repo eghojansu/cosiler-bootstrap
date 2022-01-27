@@ -72,7 +72,7 @@ function alert(string|null $message, string $type = null, bool $dismissible = tr
 }
 
 function feedback(string|null $message, string|array $classes = null): string|null {
-    return $message ? tag('div', array('class' => array('invalid-feedback', $classes)), e($message)) : null;
+    return $message ? tag('div', array('class' => array('invalid-feedback d-block', $classes)), e($message)) : null;
 }
 
 function input(
