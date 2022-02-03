@@ -46,7 +46,7 @@ class BasicCest
     public function login(User $I)
     {
         $I->amLogin();
-        $I->seeCurrentUrlEquals('/');
+        $I->seeCurrentUrlEquals('/dashboard');
         $I->see('Welcome to My Applications');
         $I->see('You are logged in as Administrator.');
     }
@@ -69,10 +69,10 @@ class BasicCest
     public function logout(User $I)
     {
         $I->amLogin();
-        $I->seeCurrentUrlEquals('/');
+        $I->seeCurrentUrlEquals('/dashboard');
         $I->see('Welcome to My Applications');
         $I->see('You are logged in as Administrator.');
-        $I->click('LOGOUT');
+        $I->click('Logout');
         $I->seeCurrentUrlEquals('/');
         $I->dontSee('You are logged in as Administrator.');
     }

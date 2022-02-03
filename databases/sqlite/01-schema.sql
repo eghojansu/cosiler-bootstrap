@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS "user";
 CREATE TABLE "user" (
   "userid" VARCHAR(8) NOT NULL,
   "name" VARCHAR(64) NOT NULL,
+  "email" VARCHAR(640) NULL,
   "password" VARCHAR(64) NULL,
   "roles" VARCHAR(255) NULL,
   "active" SMALLINT(1) NULL,

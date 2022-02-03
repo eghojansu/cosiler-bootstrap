@@ -8,6 +8,7 @@ return array(
         'owner' => 'MyCompany, Inc',
         'homepage' => 'http://example.com',
     ),
+    'layout' => 'main',
     'connection' => array(
         'default' => 'sqlite',
         'mysql' => array(

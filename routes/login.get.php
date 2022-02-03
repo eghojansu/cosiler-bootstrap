@@ -1,6 +1,7 @@
 <?php
 
 guest();
+layout('base');
 
 $data = data();
 $error = error();

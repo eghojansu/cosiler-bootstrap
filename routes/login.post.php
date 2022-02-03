@@ -22,4 +22,4 @@ if (!$found['active']) {
 user_commit($found['userid']);
 message_commit('Welcome back');
 record('login');
-redirect('/');
+redirect('/dashboard');

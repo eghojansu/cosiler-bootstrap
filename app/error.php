@@ -31,8 +31,8 @@ function handleError(Throwable $error) {
     if (Request\is_json()) {
         Response\json($data, $data['status_code']);
     } elseif ($error instanceof ValidationException) {
-        errorCommit($data['message'], $error->result->getErrors());
-        dataCommit($error->result->getData());
+        error_commit($data['message'], $error->result->getErrors());
+        data_commit($error->result->getData());
         back();
     } else {
         Response\start($code);

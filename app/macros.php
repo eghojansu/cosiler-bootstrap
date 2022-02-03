@@ -1,11 +1,12 @@
 <?php
 
 use Ekok\Utils\Arr;
-use Ekok\Utils\Payload;
 use Ekok\Utils\Str;
+use Ekok\Utils\Val;
+use Ekok\Utils\Payload;
 
 function e(string|int|float|bool|null $str): string|null {
-    return $str ? htmlspecialchars($str) : null;
+    return Val::isEmpty($str) ? null : htmlspecialchars(is_string($str) ? $str : var_export($str, true));
 }
 
 function attrs(array $attrs = null): string {
@@ -17,17 +18,17 @@ function attrs(array $attrs = null): string {
         }
 
         if (is_numeric($key)) {
-            $str .= ' ' . ((string) $value);
+            $str .= ' ' . e($value);
         } elseif (is_array($value) && ($arr = array_filter(array_unique($value)))) {
             if (Arr::indexed($arr)) {
-                $str .= ' ' . $key . '="' . implode(' ', $arr) . '"';
+                $str .= ' ' . $key . '="' . implode(' ', array_map('e', $arr)) . '"';
             } else {
-                $str .= Arr::reduce($arr, fn($str, Payload $el) => $str . ' ' . $key . $el->key . '="' . ((string) $el->value) . '"');
+                $str .= Arr::reduce($arr, fn($str, Payload $el) => $str . ' ' . $key . $el->key . '="' . e($el->value) . '"');
             }
         } elseif (true === $value) {
             $str .= ' ' . $key;
         } else {
-            $str .= ' ' . $key . '="' . ((string) $value) . '"';
+            $str .= ' ' . $key . '="' . e($value) . '"';
         }
     }
 
@@ -39,11 +40,11 @@ function value_attrs($value) {
 }
 
 function value_given($given, $value) {
-    return is_array($given) && is_array($value) ? !!array_intersect($given, $value) : $given == $value;
+    return is_array($value) ? !!array_intersect((array) $given, $value) : $given == $value;
 }
 
-function tag(string $name, array $attrs = null, string $content = null, bool $close = false): string {
-    return '<' . $name . attrs($attrs) . ($close ? ' /' : '') . '>' . $content . ($content === null ? '' : '</' . $name . '>');
+function tag(string $name, array $attrs = null, string|array $content = null, bool $close = false): string {
+    return '<' . $name . attrs($attrs) . ($close ? ' /' : '') . '>' . implode(' ', (array) $content) . ($content === null ? '' : '</' . $name . '>');
 }
 
 function alert(string|null $message, string $type = null, bool $dismissible = true): string|null {
@@ -92,6 +93,22 @@ function input(
     );
 
     return tag('input', $sets + ($attrs ?? array()));
+}
+
+function text(
+    string $name,
+    string|int|float|bool|null $value = null,
+    array $attrs = null,
+    string|array $classes = null,
+): string {
+    $sets = array(
+        'name' => $name,
+        'class' => $classes,
+        'id' => $attrs['id'] ?? ('input' . Str::casePascal($name)),
+        'placeholder' => $attrs['placeholder'] ?? Str::caseTitle($name),
+    );
+
+    return tag('textarea', $sets + ($attrs ?? array()), e($value));
 }
 
 function choice(
@@ -151,4 +168,47 @@ function choice(
     }, false === ($attrs['placeholder'] ?? null) ? '' : tag('option', null, '-- Select ' . Str::caseTitle($name) . ' --'));
 
     return tag('select', $sets, $choices);
+}
+
+function pagination_footer(array $page, string $path = null, array $query = null): string|null {
+    if (0 >= $page['total']) {
+        return null;
+    }
+
+    $url = static fn (int $page) => ($path ?? current_path()) . '?' . http_build_query(compact('page') + ($query ?? $_GET));
+    $last = $page['current_page'] === $page['last_page'];
+    $first = $page['current_page'] === 1;
+
+    return tag(
+        'div',
+        array('class' => 'row mt-3'),
+        array(
+            tag(
+                'div',
+                array('class' => 'col d-flex justify-content-end'),
+                tag(
+                    'div',
+                    array('class' => 'btn-group'),
+                    array(
+                        tag(
+                            'a',
+                            array(
+                                'href' => $first ? '#' : $url($page['prev_page']),
+                                'class' => array('btn btn-outline-secondary', $first ? 'disabled' : null),
+                            ),
+                            'Prev',
+                        ),
+                        tag(
+                            'a',
+                            array(
+                                'href' => $last ? '#' : $url($page['next_page']),
+                                'class' => array('btn btn-outline-secondary', $last ? 'disabled' : null),
+                            ),
+                            'Next',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
 }
