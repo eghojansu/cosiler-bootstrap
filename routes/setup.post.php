@@ -14,7 +14,7 @@ foreach (glob($fun['project_dir'] . '/databases/'. $fun['connection.default'] . 
   $pdo->exec(file_get_contents($file));
 }
 
-$fun['db']->update('user', array('active' => 1, 'password' => password_hash('admin123', PASSWORD_BCRYPT)), array('userid = "admin"'));
+$fun['db']->update('user', array('active' => 1, 'password' => password_hash('admin123', PASSWORD_BCRYPT)), array('userid = ?', 'admin'));
 
 file_put_contents($location, 'Installed at ' . date('Y-m-d H:i:s'));
 redirect('/');

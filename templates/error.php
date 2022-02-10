@@ -13,6 +13,7 @@
         <p><?= $message ?></p>
         <p><a href="<?= path('/') ?>" class="btn btn-primary">Home</a></p>
         <?php if ($dev): ?>
+          <div class="border my-2 p-3"><?= current_method() ?> <?= Ekok\Cosiler\Http\Request\uri() ?></div>
           <pre style="font-size: smaller"><?= implode("\n", $trace) ?></pre>
         <?php endif ?>
       </div>

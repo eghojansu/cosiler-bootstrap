@@ -1,12 +1,11 @@
 <?php
 
 use Ekok\Utils\Arr;
-use Ekok\Utils\Str;
-use Ekok\Utils\Val;
 use Ekok\Utils\Payload;
+use Ekok\Utils\Str;
 
 function e(string|int|float|bool|null $str): string|null {
-    return Val::isEmpty($str) ? null : htmlspecialchars(is_string($str) ? $str : var_export($str, true));
+    return $str ? htmlspecialchars($str) : null;
 }
 
 function attrs(array $attrs = null): string {
@@ -18,17 +17,17 @@ function attrs(array $attrs = null): string {
         }
 
         if (is_numeric($key)) {
-            $str .= ' ' . e($value);
+            $str .= ' ' . ((string) $value);
         } elseif (is_array($value) && ($arr = array_filter(array_unique($value)))) {
             if (Arr::indexed($arr)) {
-                $str .= ' ' . $key . '="' . implode(' ', array_map('e', $arr)) . '"';
+                $str .= ' ' . $key . '="' . implode(' ', $arr) . '"';
             } else {
-                $str .= Arr::reduce($arr, fn($str, Payload $el) => $str . ' ' . $key . $el->key . '="' . e($el->value) . '"');
+                $str .= Arr::reduce($arr, fn($str, Payload $el) => $str . ' ' . $key . $el->key . '="' . ((string) $el->value) . '"');
             }
         } elseif (true === $value) {
             $str .= ' ' . $key;
         } else {
-            $str .= ' ' . $key . '="' . e($value) . '"';
+            $str .= ' ' . $key . '="' . ((string) $value) . '"';
         }
     }
 
@@ -40,7 +39,7 @@ function value_attrs($value) {
 }
 
 function value_given($given, $value) {
-    return is_array($value) ? !!array_intersect((array) $given, $value) : $given == $value;
+    return is_array($given) && is_array($value) ? !!array_intersect($given, $value) : $given == $value;
 }
 
 function tag(string $name, array $attrs = null, string|array $content = null, bool $close = false): string {

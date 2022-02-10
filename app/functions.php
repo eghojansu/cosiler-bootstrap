@@ -8,8 +8,6 @@ use Ekok\Cosiler\Template;
 use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Http\Response;
 
-use function Ekok\Cosiler\Http\forbidden;
-
 // redefine: register functions as globals
 
 function storage(string $name = null, ...$sets) {
@@ -22,6 +20,10 @@ function path(string $path = null): string {
 
 function current_path(): string {
     return Request\path();
+}
+
+function current_method(): string {
+    return Request\method();
 }
 
 function asset(string $path): string {
@@ -56,6 +58,18 @@ function not_found(string $message = null, array $payload = null, array $headers
     Http\not_found($message ?? 'The requested page does not exists', $payload, $headers);
 }
 
+function forbidden(string $message = null, array $payload = null, array $headers = null): void {
+    Http\forbidden($message, $payload, $headers);
+}
+
+function unprocessable(string $message = null, array $payload = null, array $headers = null): void {
+    Http\unprocessable($message, $payload, $headers);
+}
+
+function bad_request(string $message = null, array $payload = null, array $headers = null): void {
+    Http\bad_request($message, $payload, $headers);
+}
+
 function get(string $key = null) {
     return Request\get($key);
 }
@@ -64,45 +78,67 @@ function post(string $key = null) {
     return Request\post($key);
 }
 
+function ignore_deleted(array|null $options): string {
+    $alias = isset($options['alias']) ? $options['alias'] . '.' : null;
+
+    return $alias . 'deleted_at is null';
+}
+
+function extra_save(bool $new = false): array {
+    $extra = array('updated_at' => timestamp(), 'updated_by' => user_id());
+
+    if ($new) {
+        $extra += array('created_at' => $extra['updated_at'], 'created_by' => $extra['updated_by']);
+    }
+
+    return $extra;
+}
+
+function extra_delete(): array {
+    return array('deleted_at' => timestamp(), 'deleted_by' => user_id());
+}
+
 function paginate(string $table, array|string $criteria = null, array $options = null, int $page = null): array {
     $db = db();
 
-    return $db->paginate($table, $page ?? get_int('page'), $db->getHelper()->mergeCriteria($criteria, 'deleted_at is null'), $options);
+    return $db->paginate($table, $page ?? get_int('page'), $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_all(string $table, array|string $criteria = null, array $options = null): array|null {
     $db = db();
 
-    return $db->select($table, $db->getHelper()->mergeCriteria($criteria, 'deleted_at is null'), $options);
+    return $db->select($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_one(string $table, array|string $criteria = null, array $options = null): array|null {
     $db = db();
 
-    return $db->selectOne($table, $db->getHelper()->mergeCriteria($criteria, 'deleted_at is null'), $options);
+    return $db->selectOne($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_count(string $table, array|string $criteria = null, array $options = null): int {
     $db = db();
 
-    return $db->count($table, $db->getHelper()->mergeCriteria($criteria, 'deleted_at is null'), $options);
+    return $db->count($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function save(string $table, array $data, array|string $criteria = null, array|bool|null $options = false): bool|int|array|object|null {
-    $updated = array('updated_at' => timestamp(), 'updated_by' => user_id());
-
     if (null === $criteria) {
-        $created = array('created_at' => timestamp(), 'created_by' => user_id());
-
-        return db()->insert($table, $data + $created + $updated, $options);
+        return db()->insert($table, $data + extra_save(true), $options);
     }
 
-    return db()->update($table, $data + $updated, $criteria, $options);
+    return db()->update($table, $data + extra_save(), $criteria, $options);
+}
+
+function save_batch(string $table, array $data, array|string $criteria = null, array|string $options = null): bool|int|array|null {
+    $extra = extra_save(true);
+
+    return db()->insertBatch($table, array_map(static fn(array $row) => $row + $extra, $data), $criteria, $options);
 }
 
 function delete(string $table, array|string $criteria, bool $soft = true): bool|int {
     if ($soft) {
-        return save($table, array('deleted_at' => timestamp(), 'deleted_by' => user_id()), $criteria);
+        return save($table, extra_delete(), $criteria);
     }
 
     return db()->delete($table, $criteria);
@@ -169,7 +205,7 @@ function timestamp(): string {
 // auth and messaging
 
 function user_id(): string|null {
-    return session('user');
+    return user('userid');
 }
 
 function user_verify(string $password, string $hash = null): bool {
@@ -184,24 +220,67 @@ function user(string $key = null): array|string|bool|null {
     static $user = false;
 
     if (false === $user) {
-        $user = ($id = user_id()) ? get_one('user', array('userid = ?', $id)) : null;
+        if (($bearer = Request\bearer()) && false !== strpos($bearer, ':')) {
+            list($sessid, $token) = explode(':', $bearer);
+
+            $sess = get_one('user_session', array('sessid = ?', $sessid));
+
+            if (!$sess || !password_verify($token, $sess['token'])) {
+                bad_request();
+            }
+
+            if (!$sess['active']) {
+                forbidden('Your session has been expired');
+            }
+
+            $userid = $sess['userid'];
+        }
+
+        $user = ($id = $userid ?? session('user')) ? get_one('user', array('userid = ?', $id)) : null;
 
         if ($user) {
-            $user['active'] = !!$user['active'];
+            if (!$user['active']) {
+                forbidden('Your account was inactive');
+            }
+
+            $user['sess'] = $sess ?? null;
             $user['roles'] = explode(',', $user['roles']);
-            $user['roles'][] = 'user';
+            $user['active'] = !!$user['active'];
         }
     }
 
     return $key ? ($user[$key] ?? null) : $user;
 }
 
-function user_commit($id): void {
-    session('user', $id);
+function user_commit($userid): void {
+    session('user', $userid);
 }
 
-function has_role(string|array $roles): bool {
-    return ($check = user('roles')) && 0 < count(array_intersect($check, (array) $roles));
+function user_commit_session($userid): string {
+    $sessid = Str::random(8);
+    $token = Str::random(16);
+    $hash = user_password($token);
+
+    save('user_session', array(
+        'active' => 1,
+        'token' => $hash,
+        'userid' => $userid,
+        'sessid' => $sessid,
+        'ip_address' => Request\ip_address(),
+        'user_agent' => Request\user_agent(),
+        'recorded_at' => timestamp(),
+        'device_id' => user_device_id(),
+    ));
+
+    return $sessid . ':' . $token;
+}
+
+function user_device_id(): string {
+    return $_SERVER['HTTP_X_DEVICE_ID'] ?? Request\user_agent();
+}
+
+function has_role(string|array $roles, string $sessid = null): bool {
+    return ($check = user('roles', $sessid)) && 0 < count(array_intersect($check, (array) $roles));
 }
 
 function logout(string $target = null): void {
@@ -215,16 +294,22 @@ function is_guest(): bool {
 
 function guard(string|array $roles = null, string $target = null): void {
     if (is_guest() || ($roles && !has_role($roles))) {
-        if (null === $target) {
+        if (Request\wants_json()) {
             forbidden();
-        } else {
-            Response\redirect($target ?? 'login');
         }
+
+        redirect($target ?? 'login');
     }
 }
 
 function guest(string $target = null): void {
-    is_guest() || redirect($target ?? '/');
+    if (!is_guest()) {
+        if (Request\wants_json()) {
+            forbidden();
+        }
+
+        redirect($target ?? '/');
+    }
 }
 
 function message() {
@@ -255,16 +340,16 @@ function error_commit(string $message, array $errors = null, array $data = null)
     ));
 }
 
-function record(string $activity, bool $visible = true, string $url = null): void {
+function record(string $activity, bool $visible = true, string $url = null, array $data = null): void {
     try {
-        save('user_activity', array(
+        save('user_activity', ($data ?? array()) + array(
             'userid' => user_id(),
             'activity' => $activity,
             'visible' => $visible ? 1 : 0,
-            'url' => $url ?? Request\uri(),
+            'url' => $url ?? (Request\method() . ' ' . Request\uri()),
             'ip_address' => Request\ip_address(),
             'user_agent' => Request\user_agent(),
-            'recorded_at' => date('Y-m-d H:i:s'),
+            'recorded_at' => timestamp(),
         ));
     } catch (\Throwable $e) {}
 }
@@ -273,6 +358,10 @@ function record(string $activity, bool $visible = true, string $url = null): voi
 
 function validate(array $rules, array $data = null): array {
     return storage()->validator->validate($rules, $data ?? post())->getData();
+}
+
+function validate_json(array $rules): array {
+    return validate($rules, Request\json());
 }
 
 function is_true(bool|callable $condition, ...$args): bool {
@@ -369,4 +458,20 @@ function dump(...$values): void {
     var_dump(...$values);
     print('</pre>');
     die;
+}
+
+// apis
+function api(string $message, array $data = null, bool $success = true): void {
+    $content = compact('success', 'message');
+
+    if ($data) {
+        $content[$success ? 'data' : 'errors'] = $data;
+    }
+
+    Response\json($content);
+    exit;
+}
+
+function api_fail(string $message, array $errors = null): void {
+    api($message, $errors, false);
 }

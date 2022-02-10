@@ -3,6 +3,7 @@
 use Ekok\Container\Box;
 use Ekok\Utils\Str;
 
+use function Ekok\Cosiler\Http\set_entry;
 use function Ekok\Cosiler\Template\directory;
 
 defined('ENV_') || define('ENV_', 'COSILER_ENV');
@@ -30,6 +31,8 @@ storage(
                 'project_dir' => $dir,
                 'env' => $env ?? $box['env'] ?? 'prod',
             ));
+
+            set_entry($box['entry']);
         }),
     true,
 );

@@ -28,8 +28,8 @@ function handleError(Throwable $error) {
         $data['errors'] = $error->result->getErrors();
     }
 
-    if (Request\is_json()) {
-        Response\json($data, $data['status_code']);
+    if (Request\wants_json()) {
+        Response\json($data, $data['code']);
     } elseif ($error instanceof ValidationException) {
         error_commit($data['message'], $error->result->getErrors());
         data_commit($error->result->getData());
