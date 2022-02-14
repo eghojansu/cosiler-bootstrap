@@ -9,4 +9,6 @@ layout('base');
   <?php else: ?>
     <p>You have not <a href="<?= path('login') ?>">login</a> yet!</p>
   <?php endif ?>
+
+  <div class="fs-5 my-3">Current env: <?= env() ?></div>
 </div>

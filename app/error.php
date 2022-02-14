@@ -22,7 +22,7 @@ function handleError(Throwable $error) {
     );
 
     if ($dev) {
-        $data['trace'] = Arr::formatTrace($error->getTrace());
+        $data['trace'] = Arr::formatTrace($error);
     }
 
     if ($error instanceof ValidationException) {
