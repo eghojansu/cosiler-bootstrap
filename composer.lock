@@ -167,12 +167,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/eghojansu/php-sql.git",
-                "reference": "e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8"
+                "reference": "028a0c7ca00ffa56f47cc14eeafd94d1efeb8ca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eghojansu/php-sql/zipball/e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8",
-                "reference": "e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8",
+                "url": "https://api.github.com/repos/eghojansu/php-sql/zipball/028a0c7ca00ffa56f47cc14eeafd94d1efeb8ca7",
+                "reference": "028a0c7ca00ffa56f47cc14eeafd94d1efeb8ca7",
                 "shasum": ""
             },
             "require": {
@@ -207,7 +207,7 @@
                 "issues": "https://github.com/eghojansu/php-sql/issues",
                 "source": "https://github.com/eghojansu/php-sql/tree/master"
             },
-            "time": "2022-02-14T07:24:56+00:00"
+            "time": "2022-02-14T08:58:06+00:00"
         },
         {
             "name": "ekok/php-utils",
