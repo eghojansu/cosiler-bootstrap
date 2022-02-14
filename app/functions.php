@@ -101,25 +101,25 @@ function extra_delete(): array {
 function paginate(string $table, array|string $criteria = null, array $options = null, int $page = null): array {
     $db = db();
 
-    return $db->paginate($table, $page ?? get_int('page'), $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
+    return $db->paginate($table, $page ?? get_int('page'), $db->builder->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_all(string $table, array|string $criteria = null, array $options = null): array|null {
     $db = db();
 
-    return $db->select($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
+    return $db->select($table, $db->builder->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_one(string $table, array|string $criteria = null, array $options = null): array|null {
     $db = db();
 
-    return $db->selectOne($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
+    return $db->selectOne($table, $db->builder->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function get_count(string $table, array|string $criteria = null, array $options = null): int {
     $db = db();
 
-    return $db->count($table, $db->getBuilder()->criteriaMerge($criteria, ignore_deleted($options)), $options);
+    return $db->count($table, $db->builder->criteriaMerge($criteria, ignore_deleted($options)), $options);
 }
 
 function save(string $table, array $data, array|string $criteria = null, array|bool|null $options = false): bool|int|array|object|null {
@@ -144,8 +144,8 @@ function delete(string $table, array|string $criteria, bool $soft = true): bool|
     return db()->delete($table, $criteria);
 }
 
-function query(string $sql, array $values = null, bool &$success = null): \PDOStatement {
-    return db()->query($sql, $values, $success);
+function query(string $sql, array $values = null, \PDOStatement &$query = null): bool {
+    return db()->query($sql, $values, $query);
 }
 
 // extends

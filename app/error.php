@@ -5,6 +5,7 @@ use Ekok\Cosiler\Http;
 use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Http\Response;
 use Ekok\Cosiler\Http\HttpException;
+use Ekok\Logger\Log;
 use Ekok\Validation\ValidationException;
 
 try {
@@ -28,6 +29,8 @@ function handleError(Throwable $error) {
     if ($error instanceof ValidationException) {
         $data['errors'] = $error->result->getErrors();
     }
+
+    storage()->log->log(Log::LEVEL_INFO, sprintf('[%s] %s', $data['code'], $data['message']), $data['trace'] ?? null);
 
     if (Request\wants_json()) {
         Response\json($data, $data['code']);

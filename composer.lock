@@ -116,20 +116,67 @@
             "time": "2022-01-27T10:28:31+00:00"
         },
         {
+            "name": "ekok/php-logger",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eghojansu/php-logger.git",
+                "reference": "697104b53b4b9b110c8ede66f652ac577d0c6504"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eghojansu/php-logger/zipball/697104b53b4b9b110c8ede66f652ac577d0c6504",
+                "reference": "697104b53b4b9b110c8ede66f652ac577d0c6504",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "~4.1",
+                "codeception/module-asserts": "^1.0.0",
+                "codeception/module-phpbrowser": "^1.0.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ekok\\Logger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eko Kurniawan",
+                    "email": "setiawanegho@gmail.com"
+                }
+            ],
+            "description": "PHP Logger",
+            "support": {
+                "issues": "https://github.com/eghojansu/php-logger/issues",
+                "source": "https://github.com/eghojansu/php-logger/tree/master"
+            },
+            "time": "2022-02-14T01:24:46+00:00"
+        },
+        {
             "name": "ekok/php-sql",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eghojansu/php-sql.git",
-                "reference": "a78a20a4c1089e855a9ccf6c49d029069ecddf8d"
+                "reference": "e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eghojansu/php-sql/zipball/a78a20a4c1089e855a9ccf6c49d029069ecddf8d",
-                "reference": "a78a20a4c1089e855a9ccf6c49d029069ecddf8d",
+                "url": "https://api.github.com/repos/eghojansu/php-sql/zipball/e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8",
+                "reference": "e522e5f9368ed3a07c1f2e90f6b4cd113006bcc8",
                 "shasum": ""
             },
             "require": {
+                "ekok/php-logger": "dev-master",
                 "ekok/php-utils": "dev-master",
                 "php": ">=8.0"
             },
@@ -160,7 +207,7 @@
                 "issues": "https://github.com/eghojansu/php-sql/issues",
                 "source": "https://github.com/eghojansu/php-sql/tree/master"
             },
-            "time": "2022-02-08T07:10:25+00:00"
+            "time": "2022-02-14T07:24:56+00:00"
         },
         {
             "name": "ekok/php-utils",
