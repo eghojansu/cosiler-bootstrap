@@ -1,5 +1,6 @@
 <?php
 
+use Ekok\Utils\Arr;
 use Ekok\Cosiler\Http;
 use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Http\Response;
@@ -21,7 +22,7 @@ function handleError(Throwable $error) {
     );
 
     if ($dev) {
-        $data['trace'] = array_filter(array_map('format_trace_frame', $error->getTrace()));
+        $data['trace'] = Arr::formatTrace($error->getTrace());
     }
 
     if ($error instanceof ValidationException) {

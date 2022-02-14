@@ -430,28 +430,6 @@ function menu_active(string $path): void {
 
 // debugging
 
-function format_trace_frame(array $frame) {
-    if (false !== strpos($frame['function'], '{closure}')) {
-        return '';
-    }
-
-    $line = $frame['file'];
-
-    if (isset($frame['line'])) {
-        $line .= ':' . $frame['line'];
-    }
-
-    $line .= ' ';
-
-    if (isset($frame['class'])) {
-        $line .= $frame['class'] . '->';
-    }
-
-    $line .= $frame['function'];
-
-    return $line;
-}
-
 function dump(...$values): void {
     ob_end_clean();
     print('<pre>');

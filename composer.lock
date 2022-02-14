@@ -168,12 +168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/eghojansu/php-utils.git",
-                "reference": "6ac442254f948f5f0306d77e2ed56749ef704ad3"
+                "reference": "714ab9c01789f37b44a0ca9076a7cd1a60bd7e17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/6ac442254f948f5f0306d77e2ed56749ef704ad3",
-                "reference": "6ac442254f948f5f0306d77e2ed56749ef704ad3",
+                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/714ab9c01789f37b44a0ca9076a7cd1a60bd7e17",
+                "reference": "714ab9c01789f37b44a0ca9076a7cd1a60bd7e17",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
                 "issues": "https://github.com/eghojansu/php-utils/issues",
                 "source": "https://github.com/eghojansu/php-utils/tree/master"
             },
-            "time": "2022-01-26T06:18:48+00:00"
+            "time": "2022-02-14T04:12:15+00:00"
         },
         {
             "name": "ekok/php-validation",
@@ -852,12 +852,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1254,12 +1254,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "97803eca37d319dfa7826cc2437fc020857acb53"
+                "reference": "f2de92260682e2db0f5895cda0b97b2dbb732d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/97803eca37d319dfa7826cc2437fc020857acb53",
-                "reference": "97803eca37d319dfa7826cc2437fc020857acb53",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/f2de92260682e2db0f5895cda0b97b2dbb732d67",
+                "reference": "f2de92260682e2db0f5895cda0b97b2dbb732d67",
                 "shasum": ""
             },
             "require": {
@@ -1305,9 +1305,9 @@
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
             "support": {
                 "issues": "https://github.com/phar-io/manifest/issues",
-                "source": "https://github.com/phar-io/manifest/tree/2.0.3"
+                "source": "https://github.com/phar-io/manifest/tree/master"
             },
-            "time": "2021-07-20T11:28:43+00:00"
+            "time": "2022-02-10T19:52:33+00:00"
         },
         {
             "name": "phar-io/version",
@@ -1596,12 +1596,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "be9a612b39300ee187520da12013f02dd3cc0461"
+                "reference": "72841b24ec77b67c7328b4796b8238c34c4d2825"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/be9a612b39300ee187520da12013f02dd3cc0461",
-                "reference": "be9a612b39300ee187520da12013f02dd3cc0461",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/72841b24ec77b67c7328b4796b8238c34c4d2825",
+                "reference": "72841b24ec77b67c7328b4796b8238c34c4d2825",
                 "shasum": ""
             },
             "require": {
@@ -1665,7 +1665,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-08T13:41:07+00:00"
+            "time": "2022-02-11T07:57:53+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1673,12 +1673,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "cf1c2e7c203ac650e352f4cc675a7021e7d1b3cf"
+                "reference": "38b24367e1b340aa78b96d7cab042942d917bb84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/cf1c2e7c203ac650e352f4cc675a7021e7d1b3cf",
-                "reference": "cf1c2e7c203ac650e352f4cc675a7021e7d1b3cf",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/38b24367e1b340aa78b96d7cab042942d917bb84",
+                "reference": "38b24367e1b340aa78b96d7cab042942d917bb84",
                 "shasum": ""
             },
             "require": {
@@ -1725,7 +1725,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-02T12:48:52+00:00"
+            "time": "2022-02-11T16:23:04+00:00"
         },
         {
             "name": "phpunit/php-invoker",
@@ -1914,12 +1914,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "85c519a5a2f50ec0a86d8daa6689e1a868dae162"
+                "reference": "42839036a3392d124e12dea4c7b76fbf818123e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/85c519a5a2f50ec0a86d8daa6689e1a868dae162",
-                "reference": "85c519a5a2f50ec0a86d8daa6689e1a868dae162",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/42839036a3392d124e12dea4c7b76fbf818123e0",
+                "reference": "42839036a3392d124e12dea4c7b76fbf818123e0",
                 "shasum": ""
             },
             "require": {
@@ -2009,7 +2009,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-08T06:59:34+00:00"
+            "time": "2022-02-10T14:55:22+00:00"
         },
         {
             "name": "psr/container",
@@ -2831,16 +2831,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "5.0.3",
+            "version": "5.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49"
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/23bd5951f7ff26f12d4e3242864df3e08dec4e49",
-                "reference": "23bd5951f7ff26f12d4e3242864df3e08dec4e49",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
+                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
                 "shasum": ""
             },
             "require": {
@@ -2883,7 +2883,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.3"
+                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0"
             },
             "funding": [
                 {
@@ -2891,7 +2891,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-11T13:31:12+00:00"
+            "time": "2022-02-10T07:01:19+00:00"
         },
         {
             "name": "sebastian/lines-of-code",
@@ -4184,12 +4184,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Mbstring\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
