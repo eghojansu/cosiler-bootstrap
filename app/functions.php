@@ -245,6 +245,7 @@ function user(string $key = null): array|string|bool|null {
 
             $user['sess'] = $sess ?? null;
             $user['roles'] = explode(',', $user['roles']);
+            $user['roles'][] = 'user';
             $user['active'] = !!$user['active'];
         }
     }
