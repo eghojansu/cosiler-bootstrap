@@ -35,3 +35,23 @@ CREATE TABLE "user_activity" (
   "updated_at" DATETIME NULL,
   "deleted_at" DATETIME NULL
 );
+
+DROP TABLE IF EXISTS "user_session";
+CREATE TABLE "user_session" (
+  "id" INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  "userid" VARCHAR(8) NOT NULL,
+  "sessid" VARCHAR(8) NOT NULL,
+  "token" VARCHAR(128) NOT NULL,
+  "ip_address" VARCHAR(60) NOT NULL,
+  "user_agent" VARCHAR(255) NOT NULL,
+  "device_id" VARCHAR(128) NOT NULL,
+  "recorded_at" DATETIME NOT NULL,
+  "active" SMALLINT(1) NULL,
+  "remark" VARCHAR(255) NULL,
+  "created_by" VARCHAR(8) NULL,
+  "updated_by" VARCHAR(8) NULL,
+  "deleted_by" VARCHAR(8) NULL,
+  "created_at" DATETIME NULL,
+  "updated_at" DATETIME NULL,
+  "deleted_at" DATETIME NULL
+);
