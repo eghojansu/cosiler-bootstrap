@@ -215,12 +215,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/eghojansu/php-utils.git",
-                "reference": "764731063929d7fbf1f852f60974ca551c12b0ac"
+                "reference": "198de5edd3c1d88221cc721bb1a66487adaa3ef1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/764731063929d7fbf1f852f60974ca551c12b0ac",
-                "reference": "764731063929d7fbf1f852f60974ca551c12b0ac",
+                "url": "https://api.github.com/repos/eghojansu/php-utils/zipball/198de5edd3c1d88221cc721bb1a66487adaa3ef1",
+                "reference": "198de5edd3c1d88221cc721bb1a66487adaa3ef1",
                 "shasum": ""
             },
             "require": {
@@ -253,7 +253,7 @@
                 "issues": "https://github.com/eghojansu/php-utils/issues",
                 "source": "https://github.com/eghojansu/php-utils/tree/master"
             },
-            "time": "2022-02-14T04:20:34+00:00"
+            "time": "2022-02-16T06:13:44+00:00"
         },
         {
             "name": "ekok/php-validation",
@@ -1301,12 +1301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "f2de92260682e2db0f5895cda0b97b2dbb732d67"
+                "reference": "ad1d1bc76d900fd73b683c345b6c002214ce4c6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/f2de92260682e2db0f5895cda0b97b2dbb732d67",
-                "reference": "f2de92260682e2db0f5895cda0b97b2dbb732d67",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/ad1d1bc76d900fd73b683c345b6c002214ce4c6d",
+                "reference": "ad1d1bc76d900fd73b683c345b6c002214ce4c6d",
                 "shasum": ""
             },
             "require": {
@@ -1354,7 +1354,13 @@
                 "issues": "https://github.com/phar-io/manifest/issues",
                 "source": "https://github.com/phar-io/manifest/tree/master"
             },
-            "time": "2022-02-10T19:52:33+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/theseer",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-02-15T18:57:41+00:00"
         },
         {
             "name": "phar-io/version",

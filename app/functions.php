@@ -7,6 +7,12 @@ use Ekok\Sql\Connection;
 use Ekok\Cosiler\Template;
 use Ekok\Cosiler\Http\Request;
 use Ekok\Cosiler\Http\Response;
+use Ekok\Logger\Log;
+use Ekok\Utils\Arr;
+
+// constants
+const USER_COL = 'userid';
+const USER_SESS = 'user';
 
 // redefine: register functions as globals
 
@@ -196,6 +202,10 @@ function model(string $name) {
     throw new \LogicException(sprintf('Unable to resolve model: %s', $name));
 }
 
+function do_log(string $level, string $message, array $context = null): void {
+    storage()->log->log($level, $message, $context);
+}
+
 // database
 
 function timestamp(): string {
@@ -205,7 +215,7 @@ function timestamp(): string {
 // auth and messaging
 
 function user_id(): string|null {
-    return user('userid');
+    return user(USER_COL);
 }
 
 function user_verify(string $password, string $hash = null): bool {
@@ -233,10 +243,10 @@ function user(string $key = null): array|string|bool|null {
                 forbidden('Your session has been expired');
             }
 
-            $userid = $sess['userid'];
+            $userid = $sess[USER_COL];
         }
 
-        $user = ($id = $userid ?? session('user')) ? get_one('user', array('userid = ?', $id)) : null;
+        $user = ($id = $userid ?? session(USER_SESS)) ? get_one('user', array(db()->builder->quote(USER_COL) . ' = ?', $id)) : null;
 
         if ($user) {
             if (!$user['active']) {
@@ -254,7 +264,7 @@ function user(string $key = null): array|string|bool|null {
 }
 
 function user_commit($userid): void {
-    session('user', $userid);
+    session(USER_SESS, $userid);
 }
 
 function user_commit_session($userid): string {
@@ -265,8 +275,8 @@ function user_commit_session($userid): string {
     save('user_session', array(
         'active' => 1,
         'token' => $hash,
-        'userid' => $userid,
         'sessid' => $sessid,
+        USER_COL => $userid,
         'ip_address' => Request\ip_address(),
         'user_agent' => Request\user_agent(),
         'recorded_at' => timestamp(),
@@ -280,8 +290,8 @@ function user_device_id(): string {
     return $_SERVER['HTTP_X_DEVICE_ID'] ?? Request\user_agent();
 }
 
-function has_role(string|array $roles, string $sessid = null): bool {
-    return ($check = user('roles', $sessid)) && 0 < count(array_intersect($check, (array) $roles));
+function has_role(string|array $roles): bool {
+    return ($check = user('roles')) && 0 < count(array_intersect($check, (array) $roles));
 }
 
 function logout(string $target = null): void {
@@ -342,17 +352,24 @@ function error_commit(string $message, array $errors = null, array $data = null)
 }
 
 function record(string $activity, bool $visible = true, string $url = null, array $data = null): void {
+    $activity = ($data ?? array()) + array(
+        'activity' => $activity,
+        'visible' => $visible ? 1 : 0,
+        'url' => $url ?? (Request\method() . ' ' . Request\uri()),
+        'ip_address' => Request\ip_address(),
+        'user_agent' => Request\user_agent(),
+        'recorded_at' => timestamp(),
+    );
+
     try {
-        save('user_activity', ($data ?? array()) + array(
-            'userid' => user_id(),
-            'activity' => $activity,
-            'visible' => $visible ? 1 : 0,
-            'url' => $url ?? (Request\method() . ' ' . Request\uri()),
-            'ip_address' => Request\ip_address(),
-            'user_agent' => Request\user_agent(),
-            'recorded_at' => timestamp(),
-        ));
-    } catch (\Throwable $e) {}
+        $activity[USER_COL] = user_id();
+
+        save('user_activity', $activity);
+    } catch (\Throwable $error) {
+        $trace = Arr::formatTrace($error->getTrace());
+
+        do_log(Log::LEVEL_INFO, $error->getMessage(), compact('activity', 'trace'));
+    }
 }
 
 // content
