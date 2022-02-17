@@ -3,7 +3,6 @@
 use Ekok\Cosiler\Route;
 use Ekok\Cosiler\Http\Response;
 
-empty($_GET['dump']) || dump(storage()->menu);
 record('visit', false);
 
 Route\globals_add('fun', $fun = storage());

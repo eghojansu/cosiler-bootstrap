@@ -211,3 +211,52 @@ function pagination_footer(array $page, string $path = null, array $query = null
         ),
     );
 }
+
+function nav(array $menu, array $attrs = null, array $options = null): string|null {
+    $opt = array_merge(array(
+        'end' => false,
+        'dropdown' => false,
+    ), $options ?? array());
+    $result = array_reduce(
+        $menu,
+        static function (string|null $result, array $item) use ($opt) {
+            $attrs = array(
+                // 'class' => array('nav-item'),
+                'class' => array($opt['dropdown'] ? false : 'nav-item'),
+            );
+            $aAttrs = array(
+                'href' => $item['path'],
+                // 'class' => array('nav-link'),
+                'class' => array($opt['dropdown'] ? 'dropdown-item' : 'nav-link'),
+            );
+            $child = '';
+            $text = $item['title'];
+
+            if (isset($item['icon'])) {
+                $text = tag('i', array('class' => 'bi-' . $item['icon']), '') . ' ' . $text;
+            }
+
+            if ($item['items']) {
+                $aAttrs['role'] = 'button';
+                $aAttrs['data-bs-toggle'] = 'dropdown';
+                $aAttrs['aria-expanded'] = 'false';
+                $aAttrs['class'][] = 'dropdown-toggle';
+                $attrs['class'][] = 'dropdown';
+
+                $child = nav($item['items'], array(
+                    'class' => array('dropdown-menu', $opt['end'] ? 'dropdown-menu-end' : null),
+                ), array(
+                    'dropdown' => true,
+                ));
+            }
+
+            $anchor = tag('a', $aAttrs, $text);
+
+            return $result . tag('li', $attrs, $anchor . $child);
+        },
+    );
+    $attrs['class'] = (array) ($attrs['class'] ?? array());
+    $attrs['class'][] = $opt['dropdown'] ? 'dropdown-menu' : 'navbar-nav';
+
+    return $result ? tag('ul', $attrs, $result) : null;
+}

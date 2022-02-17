@@ -59,6 +59,7 @@ CREATE TABLE "user_session" (
 DROP TABLE IF EXISTS "menu";
 CREATE TABLE "menu" (
   "menuid" VARCHAR(8) NOT NULL,
+  "grp" VARCHAR(8) NOT NULL,
   "path" VARCHAR(8) NULL,
   "title" VARCHAR(32) NULL,
   "description" VARCHAR(64) NULL,
@@ -66,8 +67,8 @@ CREATE TABLE "menu" (
   "roles" VARCHAR(255) NULL,
   "data" VARCHAR(255) NULL,
   "active" SMALLINT(1) NULL,
+  "position" SMALLINT NULL,
   "parentid" VARCHAR(8) NULL,
-  "grp" VARCHAR(8) NULL,
   "remark" VARCHAR(255) NULL,
   "created_by" VARCHAR(8) NULL,
   "updated_by" VARCHAR(8) NULL,

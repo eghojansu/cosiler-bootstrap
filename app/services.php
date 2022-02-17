@@ -18,86 +18,55 @@ return array(
         'threshold' => 'dev' === $box['env'] ? Log::LEVEL_DEBUG : Log::LEVEL_INFO,
     )),
     'menu' => function(Box $box) {
-        $groups = get_all('menu', null, array('columns' => '"distinct grp'));
-        /** @var \PDOStatement */
+        /** @var PDOStatement */
         $query = null;
-        $get = static function () use (&$query) {
-            $values = array($group, $parent);
+        $getMenu = static function (string $group, array|null $parent, Closure $getMenu) use ($query) {
+            $pid = $parent['id'] ?? null;
+            $values = array($group, $pid, $pid);
 
             if ($query) {
                 $query->execute($values);
             } else {
-                db()->query('SELECT * FROM menu WHERE ACTIVE = 1 AND grp = ? AND parentid = ?', $values, $query);
+                $sql = 'SELECT * FROM menu WHERE deleted_at IS NULL AND ACTIVE = 1 AND grp = ? AND ((? IS NULL AND parentid IS NULL) OR (parentid = ?))';
+
+                db()->query($sql, $values, $query);
             }
 
+            return array_reduce(
+                $query->fetchAll(PDO::FETCH_ASSOC),
+                static function (array|null $menu, array $row) use ($group, $parent, $getMenu) {
+                    $id = $row['menuid'];
+                    $path = $row['path'] ?? '#';
+                    $group = $row['grp'] ?? 'main';
+                    $title = Str::caseTitle($row['title'] ?? str_replace(array('#', '/', '-'), ' ', $row['path'] ?? $id));
+                    $roles = $row['roles'] ? array_filter(explode(',', $row['roles']), 'trim') : array();
+                    $prompt = isset($path[1]) && '#' === substr($path, -1);
 
-        };
-        $menu = array_reduce($groups, static function (array|null $menu, array $row) use (&$query) {
-            $group = $row['grp'] ?? 'main';
-        });
-        dump($groups);
-        // $query = db()->query('select * from menu where active = 1 and parentid =')
-        $rows = get_all('menu', 'active = 1', array('orders' => 'parentid'));
-        $getRef = static function &(array &$grouped, string $parent, $getRef) {
-            $null = null;
+                    if ('#' !== $path[0] && '#' !== ($parent['path'][0] ?? '#')) {
+                        $path = $parent['path'] . '/' . ltrim($path, '/');
+                    }
 
-            foreach ($grouped as $gid => $gval) {
-                if (!isset($gval['items'])) {
-                    'MRuPYseS' === $gid || dump('x', $gval);
-                    continue;
-                }
+                    if (isset($path[1])) {
+                        $path = trim($path, '#/');
+                    }
 
-                if (isset($gval['items'][$parent])) {
-                    return $grouped[$gid]['items'][$parent];
-                }
+                    $menu[$id] = compact('id', 'path', 'prompt', 'roles', 'title') + array(
+                        'icon' => $row['icon'],
+                        'description' => $row['description'],
+                        'parent' => $row['parentid'],
+                        'data' => $row['data'] ? json_decode($row['data']) : array(),
+                    );
+                    $menu[$id]['items'] = $getMenu($group, $menu[$id], $getMenu);
 
-                $item = &$getRef($gval, $parent, $getRef);
-                unset($gval);
-
-                if ($item) {
-                    return $item;
-                }
-            }
-
-            return $null;
-        };
-        $menu = array_reduce($rows, static function (array $menu, array $row) use ($getRef) {
-            $id = $row['menuid'];
-            $path = $row['path'] ?? '#';
-            $group = $row['grp'] ?? 'main';
-            $title = Str::caseTitle($row['title'] ?? str_replace(array('#', '/', '-'), ' ', $row['path'] ?? $id));
-            $roles = $row['roles'] ? array_filter(explode(',', $row['roles']), 'trim') : array();
-            $prompt = isset($path[1]) && '#' === substr($path, -1);
-
-            if (isset($path[1])) {
-                $path = trim($path, '#/');
-            }
-
-            if ($row['parentid']) {
-                if (isset($menu[$row['parentid']])) {
-                    $item = &$menu[$row['parentid']];
-                } else {
-                    $item = &$getRef($menu, $row['parentid'], $getRef);
-                }
-
-                if ($roles) {
-                    array_push($item['roles'], ...$roles);
-                }
-
-                $item = &$item['items'][$id];
-            } else {
-                $item = &$menu[$id];
-            }
-
-            $item = compact('id', 'path', 'prompt', 'roles', 'title') + array(
-                'icon' => $row['icon'],
-                'description' => $row['description'],
-                'parent' => $row['parentid'],
-                'data' => $row['data'] ? json_decode($row['data']) : array(),
+                    return $menu;
+                },
             );
-
-            return $menu;
-        }, array());
+        };
+        $menu = array_reduce(
+            get_all('menu', 'active = 1', array('columns' => '"distinct grp')),
+            static fn (array $menu, array $row) => $menu + array($row['grp'] => $getMenu($row['grp'], null, $getMenu)),
+            array(),
+        );
 
         return $menu;
     },

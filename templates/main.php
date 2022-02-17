@@ -33,6 +33,7 @@ $account = array_filter(
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!--
           <ul class="navbar-nav mb-2 mb-lg-0">
             <?php foreach ($menu as $label => list($path, $icon, $active)): ?>
               <li class="nav-item">
@@ -42,6 +43,10 @@ $account = array_filter(
               </li>
             <?php endforeach ?>
           </ul>
+            -->
+          <?= nav(storage()->menu['main'], array('class' => 'mb-2 mb-lg-0')) ?>
+          <?= nav(storage()->menu['profile'], array('class' => 'ms-auto mb-2 mb-lg-0'), array('end' => true)) ?>
+          <!--
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,6 +60,7 @@ $account = array_filter(
               </ul>
             </li>
           </ul>
+            -->
         </div>
       </div>
     </nav>
