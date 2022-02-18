@@ -18,7 +18,7 @@ storage(
             __DIR__ . '/../env.' . ($env = isset($_ENV[ENV_]) ? strtolower($_ENV[ENV_]) : null) .'.php',
             __DIR__ . '/services.php',
         )
-        ->loadInto('choice.', __DIR__ . '/choices.php')
+        ->loadInto('choice.', __DIR__ . '/constants.php')
         ->with(static function (Box $box) use ($env) {
             $dir = Str::fixslashes(dirname(__DIR__));
             $tmp = $box['tmp_dir'] ?? ($dir . '/var');
