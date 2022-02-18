@@ -59,7 +59,7 @@ CREATE TABLE "user_session" (
 DROP TABLE IF EXISTS "menu";
 CREATE TABLE "menu" (
   "menuid" VARCHAR(8) NOT NULL,
-  "grp" VARCHAR(8) NOT NULL,
+  "root" SMALLINT(1) NULL,
   "path" VARCHAR(8) NULL,
   "title" VARCHAR(32) NULL,
   "description" VARCHAR(64) NULL,

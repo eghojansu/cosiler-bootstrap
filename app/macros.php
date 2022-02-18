@@ -18,7 +18,11 @@ function attrs(array $attrs = null): string {
 
         if (is_numeric($key)) {
             $str .= ' ' . ((string) $value);
-        } elseif (is_array($value) && ($arr = array_filter(array_unique($value)))) {
+        } elseif (is_array($value)) {
+            if (!($arr = array_filter(array_unique($value)))) {
+                continue;
+            }
+
             if (Arr::indexed($arr)) {
                 $str .= ' ' . $key . '="' . implode(' ', $arr) . '"';
             } else {

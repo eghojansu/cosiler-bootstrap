@@ -20,24 +20,23 @@ return array(
     'menu' => function(Box $box) {
         /** @var PDOStatement */
         $query = null;
-        $getMenu = static function (string $group, array|null $parent, Closure $getMenu) use ($query) {
+        $getMenu = static function (array|null $parent, Closure $getMenu) use ($query) {
             $pid = $parent['id'] ?? null;
-            $values = array($group, $pid, $pid);
+            $values = array($pid, $pid);
 
             if ($query) {
                 $query->execute($values);
             } else {
-                $sql = 'SELECT * FROM menu WHERE deleted_at IS NULL AND ACTIVE = 1 AND grp = ? AND ((? IS NULL AND parentid IS NULL) OR (parentid = ?))';
+                $sql = 'SELECT * FROM menu WHERE deleted_at IS NULL AND ACTIVE = 1 AND ((? IS NULL AND parentid IS NULL) OR (parentid = ?))';
 
                 db()->query($sql, $values, $query);
             }
 
             return array_reduce(
                 $query->fetchAll(PDO::FETCH_ASSOC),
-                static function (array|null $menu, array $row) use ($group, $parent, $getMenu) {
+                static function (array|null $menu, array $row) use ($parent, $getMenu) {
                     $id = $row['menuid'];
                     $path = $row['path'] ?? '#';
-                    $group = $row['grp'] ?? 'main';
                     $title = Str::caseTitle($row['title'] ?? str_replace(array('#', '/', '-'), ' ', $row['path'] ?? $id));
                     $roles = $row['roles'] ? array_filter(explode(',', $row['roles']), 'trim') : array();
                     $prompt = isset($path[1]) && '#' === substr($path, -1);
@@ -56,15 +55,15 @@ return array(
                         'parent' => $row['parentid'],
                         'data' => $row['data'] ? json_decode($row['data']) : array(),
                     );
-                    $menu[$id]['items'] = $getMenu($group, $menu[$id], $getMenu);
+                    $menu[$id]['items'] = $getMenu($menu[$id], $getMenu);
 
                     return $menu;
                 },
             );
         };
         $menu = array_reduce(
-            get_all('menu', 'active = 1', array('columns' => '"distinct grp')),
-            static fn (array $menu, array $row) => $menu + array($row['grp'] => $getMenu($row['grp'], null, $getMenu)),
+            get_all('menu', 'root = 1', array('columns' => array('id' => 'menuid', 'path'))),
+            static fn (array $menu, array $group) => $menu + array($group['id'] => $getMenu($group, $getMenu)),
             array(),
         );
 
